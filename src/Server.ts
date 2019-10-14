@@ -1,10 +1,9 @@
 import * as http from 'http';
 
-const corsHeader = { 'Access-Control-Allow-Origin': 'http://localhost:8080' }
-const textHeader = { 'Access-Control-Allow-Origin': 'http://localhost:8080', 'Content-Type': 'text/plain' }
-const jsonHeader = { 'Access-Control-Allow-Origin': 'http://localhost:8080', 'Content-Type': 'application/json' }
+const textHeader = { 'Access-Control-Allow-Origin': 'http://localhost:8080', 'Content-Type': 'text/plain' };
+const jsonHeader = { 'Access-Control-Allow-Origin': 'http://localhost:8080', 'Content-Type': 'application/json' };
 
-export class Server {
+export default class Server {
 
     private incomingMessage: http.IncomingMessage;
     private serverResponse: http.ServerResponse
