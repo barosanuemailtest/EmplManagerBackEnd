@@ -1,9 +1,9 @@
 export enum WorkingPossition {
-    JUNIOR,
-    PROGRAMMER,
-    ENGINNER,
-    EXPERT,
-    MANAGER
+    JUNIOR = 'junior',
+    PROGRAMMER = 'programmer',
+    ENGINNER = 'enginner',
+    EXPERT = 'expert',
+    MANAGER = 'manager'
 }
 
 export interface Employee {
