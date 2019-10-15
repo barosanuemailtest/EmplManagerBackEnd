@@ -1,12 +1,16 @@
 import * as http from 'http';
-
-const textHeader = { 'Access-Control-Allow-Origin': 'http://localhost:8080', 'Content-Type': 'text/plain' };
-const jsonHeader = { 'Access-Control-Allow-Origin': 'http://localhost:8080', 'Content-Type': 'application/json' };
+import { jsonHeader, textHeader, statusCodes } from './model/Headers';
+import DataService from './DataService';
 
 export default class Server {
 
     private incomingMessage: http.IncomingMessage;
     private serverResponse: http.ServerResponse
+    private dataService: DataService;
+
+    constructor() {
+        this.dataService = new DataService();
+    }
 
     public createServer() {
         http.createServer((req, res) => {
@@ -19,16 +23,44 @@ export default class Server {
     private respond() {
         const url = this.incomingMessage.url;
         switch (url) {
-            case '/managers':
-                this.serverResponse.writeHead(200, jsonHeader);
-                this.serverResponse.end(JSON.stringify('managers'));
+            case '/allemployees':
+                this.serverResponse.writeHead(statusCodes.OK, jsonHeader);
+                this.serverResponse.end(JSON.stringify(this.dataService.getAllEmployyes()));
                 break;
-            case '/employees':
-                this.serverResponse.writeHead(200, jsonHeader);
-                this.serverResponse.end(JSON.stringify('employees'));
+            case '/juniors':
+                this.serverResponse.writeHead(statusCodes.OK, jsonHeader);
+                this.serverResponse.end(JSON.stringify(this.dataService.getJuniors()));
+                break;
+            case '/programmers':
+                this.serverResponse.writeHead(statusCodes.OK, jsonHeader);
+                this.serverResponse.end(JSON.stringify(this.dataService.getProgrammers()));
+                break;
+            case '/engineers':
+                this.serverResponse.writeHead(statusCodes.OK, jsonHeader);
+                this.serverResponse.end(JSON.stringify(this.dataService.getEngineers()));
+                break;
+            case '/experts':
+                this.serverResponse.writeHead(statusCodes.OK, jsonHeader);
+                this.serverResponse.end(JSON.stringify(this.dataService.getExperts()));
+                break;
+            case '/managers':
+                this.serverResponse.writeHead(statusCodes.OK, jsonHeader);
+                this.serverResponse.end(JSON.stringify(this.dataService.getManagers()));
+                break;
+            case '/admins':
+                const all = this.dataService.getAllEmployyes();
+                const admins = this.dataService.withAdmin(all, true);
+                this.serverResponse.writeHead(statusCodes.OK, jsonHeader);
+                this.serverResponse.end(JSON.stringify(admins));
+                break;
+            case '/nonadmins':
+                const all2 = this.dataService.getAllEmployyes();
+                const nonAdmins = this.dataService.withAdmin(all2, false);
+                this.serverResponse.writeHead(statusCodes.OK, jsonHeader);
+                this.serverResponse.end(JSON.stringify(nonAdmins));
                 break;
             default:
-                this.serverResponse.writeHead(404, textHeader);
+                this.serverResponse.writeHead(statusCodes.NOT_FOUND, textHeader);
                 this.serverResponse.end('Page not found!');
                 break;
         }
